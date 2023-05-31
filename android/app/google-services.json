@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "1049615728770",
+    "project_id": "msnastore",
+    "storage_bucket": "msnastore.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049615728770:android:dffd4d7b0d6d6b5773349b",
+        "android_client_info": {
+          "package_name": "com.admin.shoping213"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCtH6i0sKWVuRLbVslXzgYrCPTQBfi62k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049615728770:android:1e26276f7a25b9f573349b",
+        "android_client_info": {
+          "package_name": "com.shop.apps23"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCtH6i0sKWVuRLbVslXzgYrCPTQBfi62k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+
+
+
+  "configuration_version": "1"
+}
