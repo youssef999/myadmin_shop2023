@@ -76,22 +76,26 @@ class CatProductsView extends StatelessWidget {
                             ),
                             child: Column(
                               children: <Widget>[
-                                Container(
+
+                                SizedBox(
                                   width: MediaQuery.of(context).size.width,
                                   height: 126,
-                                  child: Image.network(posts['image'],
+                                  child: Image.network(posts['image'][0],
                                   fit:BoxFit.fitWidth,
                                   ),
-
                                 ),
+
                                 const SizedBox(
                                   height: 4,
                                 ),
+
                                 Custom_Text(text: posts['cat'],
                                   fontSize: 14,
                                   alignment: Alignment.center,
                                   color: ColorsManager.primary3
                                 ),
+
+
                                 const SizedBox(height: 2,),
                                 Custom_Text(text: posts['name'],
                                   fontSize: 16,

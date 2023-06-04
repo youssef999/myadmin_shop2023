@@ -88,6 +88,11 @@ class GetDataFireBaseErrorState extends CartStates{
   GetDataFireBaseErrorState();
 
 }
+class DeleteProductsSuccessState extends CartStates{
+
+
+  DeleteProductsSuccessState();
+}
 
 class AddToFireBaseSuccessState extends CartStates{
 

@@ -71,7 +71,7 @@ class ProductsView extends StatelessWidget {
                                  SizedBox(
                                    height: 130,
                                    width: MediaQuery.of(context).size.width,
-                                   child:  Image.network(posts['image'],fit:BoxFit.fitWidth,),),
+                                   child:  Image.network(posts['image'][0],fit:BoxFit.fitWidth,),),
                                  const SizedBox(
                                    height: 5,
                                  ),

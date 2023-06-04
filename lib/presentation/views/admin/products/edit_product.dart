@@ -39,6 +39,7 @@ class EditProduct extends StatelessWidget {
     builder: (context, state) {
 
     AdminCubit cubit = AdminCubit.get(context);
+      List images=posts['image'];
     return Scaffold(
       appBar:AppBar(
         toolbarHeight: 3,
@@ -48,8 +49,8 @@ class EditProduct extends StatelessWidget {
         padding: const EdgeInsets.all(22.0),
         child: ListView(
           children:  [
-            const SizedBox(height: 20,),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 1,),
+
             cubit.pickedImageXFile != null?
             InkWell(
               child: Container(
@@ -70,18 +71,20 @@ class EditProduct extends StatelessWidget {
               child: Column(
                 children:   [
 
-                  CircleAvatar(
-                      radius: 100,
-                      child:Image.network(posts['image'])
-                  ),
+              //    for(int i=0;i<images.length;i++)
+                  Container(
+                     // height:111,
+                      width: MediaQuery.of(context).size.width,
+                      child: Image.network(posts['image'][0])),
+
                   const SizedBox(height: 10,),
-                  const Custom_Text(text: 'اضف صورة جديدة ',color:Colors.black,
-                    fontSize:21,alignment:Alignment.center,
-                  ),
+                  // const Custom_Text(text: 'اضف صورة جديدة ',color:Colors.black,
+                  //   fontSize:21,alignment:Alignment.center,
+                  // ),
                 ],
               ),
               onTap:(){
-                cubit.showDialogBox(context);
+               // cubit.showDialogBox(context);
               },
             ),
             const SizedBox(height: 20,),

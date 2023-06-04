@@ -4,9 +4,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:shop_app/presentation/const/app_message.dart';
 import 'package:shop_app/presentation/resources/color_manager.dart';
+import 'package:shop_app/presentation/views/admin/admin_view.dart';
 import 'package:shop_app/presentation/views/admin/products/product_details.dart';
 import 'package:shop_app/presentation/widgets/Custom_Text.dart';
+import 'package:shop_app/presentation/widgets/Custom_button.dart';
 
 class CatView extends StatelessWidget {
   const CatView({Key? key}) : super(key: key);
@@ -45,7 +48,7 @@ Widget CatWidget() {
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
                       mainAxisSpacing: 4,
-                      childAspectRatio:0.85
+                      childAspectRatio:1.3
                   ),
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: snapshot.data!.docs.length,
@@ -64,10 +67,16 @@ Widget CatWidget() {
                           ),
                           child: Column(
                             children: <Widget>[
-                              const SizedBox(height: 2,),
+                              const SizedBox(height: 30,),
                               Custom_Text(text: posts['name'],fontSize:17,alignment:Alignment.center,
                                 fontWeight:FontWeight.bold,
                               ),
+                              const SizedBox(height: 20,),
+                              CustomButton(text:'حذف القسم', onPressed: (){
+
+                      DeleteCatInFireBase(posts: posts);
+
+                              }, color1: ColorsManager.primary, color2: ColorsManager.primary2)
 
 
                             ],
@@ -75,18 +84,27 @@ Widget CatWidget() {
                         ),
                       ),
                       onTap:(){
-                        // Get.to(AdminProductDetails(
-                        //   tag: 'img$index',
-                        //   posts: posts,
-                        // ));
-                        // Get.to (ProductDetailsView(
-                        //     posts: posts,
-                        //     tag:'img$index'
-                        // ));
                       },
                     );
                   });
           }
         }),
   );
+}
+
+DeleteCatInFireBase ({required DocumentSnapshot posts})async{
+
+  final CollectionReference _updates =
+  FirebaseFirestore.instance.collection('categories');
+  await _updates
+      .where('name', isEqualTo: posts['name'])
+      .get().then((snapshot) {
+    snapshot.docs.last.reference.delete()
+        .then((value) {
+      print("DELETED");
+      appMessage(text: 'تم الحذف بنجاح');
+      Get.offAll(const AdminView());
+
+    });
+  });
 }

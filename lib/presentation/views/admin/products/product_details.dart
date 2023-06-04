@@ -8,6 +8,7 @@ import 'package:shop_app/presentation/bloc/cart/cart_states.dart';
 import 'package:shop_app/presentation/const/app_message.dart';
 import 'package:shop_app/presentation/resources/color_manager.dart';
 import 'package:shop_app/presentation/views/Fav/fav_products_view.dart';
+import 'package:shop_app/presentation/views/admin/admin_view.dart';
 import 'package:shop_app/presentation/views/products/product_video_view.dart';
 import 'package:shop_app/presentation/widgets/Custom_Text.dart';
 import 'package:shop_app/presentation/widgets/Custom_button.dart';
@@ -24,20 +25,22 @@ class AdminProductDetails extends StatelessWidget {
   String tag;
   AdminProductDetails({Key? key,required this.posts,required this.tag}) : super(key: key);
 
-
   List data=[];
+
+
   @override
   Widget build(BuildContext context) {
-
-
-
 
     return  BlocProvider(
         create: (BuildContext context) => CartCubit(),
         child: BlocConsumer<CartCubit, CartStates>(
-            listener: (context, state) {},
+            listener: (context, state) {
+              if(state is DeleteProductsSuccessState){
+                appMessage(text: 'تم الحذف بنجاح');
+                Get.offAll(const AdminView());
+              }
+            },
             builder: (context, state) {
-
               CartCubit cubit = CartCubit.get(context);
               return Scaffold(
                 backgroundColor:Colors.grey[100],
@@ -58,7 +61,7 @@ class AdminProductDetails extends StatelessWidget {
                           ),
                           width: MediaQuery.of(context).size.width,
                           //height: 600,
-                          child:Image.network(posts['image'],
+                          child:Image.network(posts['image'][0],
                               fit:BoxFit.cover
                           ),
                         ),
@@ -82,24 +85,24 @@ class AdminProductDetails extends StatelessWidget {
 
                                 const SizedBox(width: 60,),
 
-                                ((cubit.data.contains(posts['productid'])==true && cubit.isFav2==false)
-                                    || (cubit.isFav ==true&& cubit.isFav2==false))?
-
-                                InkWell (child: const Icon(Icons.favorite
-                                  ,size:33
-                                  ,color:Colors.redAccent,),
-                                  onTap:() {
-
-                                    cubit.DeleteFromFav(posts: posts);
-
-                                  },
-
-                                ):  InkWell(child: const Icon(Icons.favorite_border,size:33,color:Colors.red,),
-                                  onTap:(){
-
-                                    cubit.addToFav(posts: posts);
-                                  },
-                                ),
+                                // ((cubit.data.contains(posts['productid'])==true && cubit.isFav2==false)
+                                //     || (cubit.isFav ==true&& cubit.isFav2==false))?
+                                //
+                                // InkWell (child: const Icon(Icons.favorite
+                                //   ,size:33
+                                //   ,color:Colors.redAccent,),
+                                //   onTap:() {
+                                //
+                                //     cubit.DeleteFromFav(posts: posts);
+                                //
+                                //   },
+                                //
+                                // ):  InkWell(child: const Icon(Icons.favorite_border,size:33,color:Colors.red,),
+                                //   onTap:(){
+                                //
+                                //     cubit.addToFav(posts: posts);
+                                //   },
+                                // ),
 
                                 const SizedBox(width: 60,),
 
@@ -165,10 +168,15 @@ class AdminProductDetails extends StatelessWidget {
                               Get.to(EditProduct(
                                 posts: posts,
                               ));
+
+
                             }, color1: ColorsManager.primary, color2: ColorsManager.primary2),
                             const SizedBox(height: 22,),
                             CustomButton(text: ' حذف  ', onPressed:(){
 
+                              cubit.DeleteDataInFireBase(
+                                posts: posts
+                              );
                             }, color1: ColorsManager.primary, color2: ColorsManager.primary2),
                             const SizedBox(height: 50,),
                           ],
@@ -181,8 +189,8 @@ class AdminProductDetails extends StatelessWidget {
                 ),
               );
             }));
-  }
 
+  }
 }
 
 

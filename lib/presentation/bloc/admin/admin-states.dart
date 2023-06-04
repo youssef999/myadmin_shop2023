@@ -9,6 +9,13 @@ class AppIntialState extends AdminStates{
 
 }
 
+class AddNewSplashSuccessState extends AdminStates{
+
+
+  AddNewSplashSuccessState();
+}
+
+
 class AddNewProductSuccessState extends AdminStates{
 
 
@@ -25,6 +32,13 @@ class EditProductsSuccessState extends AdminStates{
 
 
   EditProductsSuccessState();
+}
+
+
+class DeleteProductsSuccessState extends AdminStates{
+
+
+  DeleteProductsSuccessState();
 }
 
 

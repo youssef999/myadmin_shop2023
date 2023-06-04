@@ -41,6 +41,7 @@ dependencies:
   geocoding: ^2.1.0
   bloc: ^8.1.1
   sqflite: ^2.2.8+4
+  transparent_image: ^2.0.1
   flutter_bloc: ^8.1.2
   carousel_slider: ^4.2.1
   flutter_local_notifications: ^14.1.0

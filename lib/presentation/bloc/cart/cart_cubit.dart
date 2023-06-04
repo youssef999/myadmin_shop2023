@@ -276,6 +276,20 @@ String country=box.read('country')??"x";
     });
   }
 
+  DeleteDataInFireBase ({required DocumentSnapshot posts})async{
+
+    final CollectionReference _updates =
+    FirebaseFirestore.instance.collection('products');
+    await _updates
+        .where('productid', isEqualTo: posts['productid'])
+        .get().then((snapshot) {
+      snapshot.docs.last.reference.delete()
+          .then((value) {
+        print("DELETED");
+        emit(DeleteProductsSuccessState());
+      });
+    });
+  }
 }
 
 

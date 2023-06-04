@@ -14,6 +14,7 @@ import 'package:shop_app/presentation/views/Home/main_home.dart';
 import 'package:shop_app/presentation/widgets/Custom_Text.dart';
 import 'package:http/http.dart' as http;
 import '../../const/app_message.dart';
+import '../../views/admin/admin_view.dart';
 import 'admin-states.dart';
 
 class AdminCubit extends Cubit<AdminStates> {
@@ -33,6 +34,8 @@ class AdminCubit extends Cubit<AdminStates> {
   TextEditingController numController = TextEditingController();
   TextEditingController desController = TextEditingController();
   TextEditingController price = TextEditingController();
+  TextEditingController quant = TextEditingController();
+  TextEditingController rate = TextEditingController();
   TextEditingController video = TextEditingController();
   TextEditingController days = TextEditingController();
   TextEditingController date = TextEditingController();
@@ -42,7 +45,11 @@ class AdminCubit extends Cubit<AdminStates> {
   XFile? pickedImageXFile;
   var imageLink = '';
   String downloadUrl = '';
+  List<String> downloadUrls = [];
   bool data=false;
+  List<XFile>? pickedImageXFiles;
+  bool isImage=false;
+
   showDialogBox(BuildContext context) {
     return showDialog(
         context: context,
@@ -109,6 +116,8 @@ class AdminCubit extends Cubit<AdminStates> {
     //   uploadImageToFirebaseStorage(pickedImageXFile!);
   }
 
+
+
   Future<String> uploadImageToFirebaseStorage(XFile image) async {
     try {
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
@@ -126,17 +135,50 @@ class AdminCubit extends Cubit<AdminStates> {
   }
 
 
+
+  Future uploadMultiImageToFirebaseStorage(List<XFile> images) async {
+    print('IMAGES');
+    for(int i=0;i<images.length;i++){
+
+      try {
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference reference =
+        FirebaseStorage.instance.ref().child('images/$fileName');
+        UploadTask uploadTask = reference.putFile(File(images[i].path));
+        TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+        downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        downloadUrls.add(downloadUrl);
+        return downloadUrls;
+      } catch (e) {
+        // Handle any errors that occur during the upload process
+        print('Error uploading image to Firebase Storage: $e');
+        return downloadUrls;
+      }
+    }
+
+
+  }
+
+
+
+
+
+
+
+
   addCountryToFireBase() async {
     uploadImageToFirebaseStorage(pickedImageXFile!).then((value) async {
       if(nameController.text.length>1){
         await FirebaseFirestore.instance.collection('countries').add({
           'name': nameController.text,
           'currency': desController.text,
-          'image': downloadUrl,
+          'img': downloadUrl,
         }).then((value) {
-          print('addddddddd');
-          emit(AddNewProductSuccessState());
+
+         appMessage(text: 'تم اضافة البلد بنجاح');
+         Get.off(const AdminView());
         });
+
       }else{
         appMessage(text: 'تاكد من ادخال البيانات بشكل صحيح');
       }
@@ -145,9 +187,21 @@ class AdminCubit extends Cubit<AdminStates> {
   }
 
 
+  pickMultiImage() async {
+    pickedImageXFiles = await _picker.pickMultiImage(
+      imageQuality: 100,
+    );
+    isImage = true;
+
+    emit(setImageSuccessState());
+  }
+
 
   addDataToFireBase() async {
-    uploadImageToFirebaseStorage(pickedImageXFile!).then((value) async {
+
+
+      uploadMultiImageToFirebaseStorage(pickedImageXFiles!).then((value) async {
+
       final random = Random.secure();
       const chars =
           'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGRTYUIOAPMSKSOAPALIOWWNCVZ';
@@ -158,17 +212,18 @@ class AdminCubit extends Cubit<AdminStates> {
       }
 
       if(nameController.text.length>1&&desController.text.length>5&&
-      countryController.text.length>1&&price.text.length>0&&catController.text.length>2){
+      countryController.text.length>1&&price.text.isNotEmpty&&catController.text.length>2){
         await FirebaseFirestore.instance.collection('products').add({
           'name': nameController.text,
           'des': desController.text,
-          'image': downloadUrl,
-          'video':'',
+          'image': downloadUrls,
+          'video':video.text,
+          'quant':quant.text,
           'country': countryController.text,
           'productid': result,
           'price': num.parse(price.text),
           'cat': catController.text,
-          'rate': 0.0,
+          'rate':rate.text,
         }).then((value) {
           print('addddddddd');
           emit(AddNewProductSuccessState());
@@ -178,7 +233,30 @@ class AdminCubit extends Cubit<AdminStates> {
       }
 
     });
+
   }
+
+
+
+
+  splashToFireBase() async {
+
+
+    uploadMultiImageToFirebaseStorage(pickedImageXFiles!).then((value) async {
+
+      await FirebaseFirestore.instance.collection('splash').add({
+        'image': downloadUrl,
+      }).then((value) {
+        print('addddddddd');
+        emit(AddNewSplashSuccessState());
+      });
+
+    });
+
+  }
+
+
+
 
   addCatToFireBase() async {
     if(nameController.text.length>1){
@@ -204,7 +282,6 @@ class AdminCubit extends Cubit<AdminStates> {
 
 
   EditDataInFireBase ({required DocumentSnapshot posts})async{
-
 
     String name='';
     String des='';
@@ -252,13 +329,13 @@ class AdminCubit extends Cubit<AdminStates> {
 
 
 
-    if(data==true){
-      uploadImageToFirebaseStorage(pickedImageXFile!);
-      img= downloadUrl;
-    }else{
-      print('noxxxxx');
-      img=posts['image'];
-    }
+    // if(data==true){
+    //   uploadImageToFirebaseStorage(pickedImageXFile!);
+    //   img= downloadUrl;
+    // }else{
+    //   print('noxxxxx');
+    //   img=posts['image'];
+    // }
 
 
     final CollectionReference _updates =
@@ -269,12 +346,12 @@ class AdminCubit extends Cubit<AdminStates> {
       snapshot.docs.last.reference.update({
         'name':name,
         'des': des,
-        'image': img,
+       // 'image': img,
         'video':vid,
         'country': country,
         'price': pr,
         'cat': cat,
-        'rate': 0.0,
+       // 'rate': 0.0,
       }).then((value) {
 
         print("EDITED");
@@ -283,6 +360,39 @@ class AdminCubit extends Cubit<AdminStates> {
       });
     });
   }
+
+
+  DeleteDataInFireBase ({required DocumentSnapshot posts})async{
+
+    final CollectionReference _updates =
+    FirebaseFirestore.instance.collection('products');
+    await _updates
+        .where('productid', isEqualTo: posts['productid'])
+        .get().then((snapshot) {
+      snapshot.docs.last.reference.delete()
+    .then((value) {
+        print("DELETED");
+        emit(DeleteProductsSuccessState());
+      });
+    });
+  }
+
+
+  DeleteCountryInFireBase ({required DocumentSnapshot posts})async{
+
+    final CollectionReference _updates =
+    FirebaseFirestore.instance.collection('countries');
+    await _updates
+        .where('name', isEqualTo: posts['name'])
+        .get().then((snapshot) {
+      snapshot.docs.last.reference.delete()
+          .then((value) {
+        print("DELETED");
+        emit(DeleteProductsSuccessState());
+      });
+    });
+  }
+
 
 
 }
