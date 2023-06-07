@@ -24,11 +24,8 @@ class SplashView extends StatelessWidget {
             listener: (context, state) {
 
               if(state is AddNewSplashSuccessState){
-
                 appMessage(text: 'تم اضافة  بنجاح');
-
-             //   Get.offAll(const AdminView());
-
+               Get.offAll(const AdminView());
               }
             },
 

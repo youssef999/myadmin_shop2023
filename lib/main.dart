@@ -26,7 +26,7 @@ void main()async {
     return  GetMaterialApp(
       debugShowCheckedModeBanner: false,
       textDirection:TextDirection.rtl,
-      title: 'Shop',
+      title: 'ADMIN',
       color:ColorsManager.primary,
       theme: ThemeData(
         primarySwatch: Colors.red,

@@ -834,10 +834,12 @@ class OrdersView extends StatelessWidget {
                                 const SizedBox(height: 10,),
                                 Column(
                                   children: [
+
                                     const Custom_Text(
                                         text: 'حالة الطلب ',
                                         fontSize: 24,
                                         alignment: Alignment.center),
+
 
 
                                     Custom_Text(
@@ -863,8 +865,6 @@ class OrdersView extends StatelessWidget {
 }
 
  EditOrderStatus ({required DocumentSnapshot posts,required String status})async{
-
-
    final CollectionReference _updates =
    FirebaseFirestore.instance.collection('orders');
    await _updates
@@ -877,7 +877,6 @@ class OrdersView extends StatelessWidget {
        appMessage(text: 'تم تعديل الحالة بنجاح ');
       // Get.offAll(const AdminView());
        print("EDITED");
-
      });
    });
  }

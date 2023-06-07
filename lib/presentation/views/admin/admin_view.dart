@@ -40,14 +40,14 @@ class AdminView extends StatelessWidget {
 
             const SizedBox(height: 20,),
 
-
-            CustomButton(text:' تغيير الsplash للتطبيق ', onPressed:(){
-
-              Get.to(const SplashView());
-
-            }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
-
-            const SizedBox(height: 20,),
+            //
+            // CustomButton(text:' تغيير الsplash للتطبيق ', onPressed:(){
+            //
+            //   Get.to(const SplashView());
+            //
+            // }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
+            //
+            // const SizedBox(height: 20,),
 
 
             CustomButton(text:'اضف منتج جديد', onPressed:(){

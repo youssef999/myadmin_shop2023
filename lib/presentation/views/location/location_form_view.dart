@@ -10,7 +10,6 @@ import 'package:shop_app/presentation/widgets/Custom_button.dart';
 import 'package:shop_app/presentation/widgets/custom_textformfield.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../domain/models/cart_model.dart';
-import '../../bloc/cart/cart_cubit.dart';
 import '../../bloc/location/location_cubit.dart';
 import '../../bloc/location/location_states.dart';
 
