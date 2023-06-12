@@ -9,13 +9,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'bloc_obs.dart';
 
 
-void main()async {
+ void main()async {
+
   Bloc.observer = MyBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp();
   runApp(const MyApp());
-}
+
+ }
 
 
  class MyApp extends StatelessWidget {

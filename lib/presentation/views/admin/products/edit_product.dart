@@ -24,7 +24,9 @@ class EditProduct extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (BuildContext context) => AdminCubit(),
+        create: (BuildContext context) => AdminCubit()..fetchCountries()..fetchCat()
+        ..changeCatFirst(posts['cat'])..changeCountryData(posts['country'])
+        ,
         child: BlocConsumer<AdminCubit, AdminStates>(
 
         listener: (context, state) {
@@ -33,13 +35,12 @@ class EditProduct extends StatelessWidget {
             appMessage(text: 'تم التعديل بنجاح');
             Get.offAll(const AdminView());
           }
-
     },
 
     builder: (context, state) {
 
     AdminCubit cubit = AdminCubit.get(context);
-      List images=posts['image'];
+   //   List images=posts['image'];
     return Scaffold(
       appBar:AppBar(
         toolbarHeight: 3,
@@ -72,7 +73,7 @@ class EditProduct extends StatelessWidget {
                 children:   [
 
               //    for(int i=0;i<images.length;i++)
-                  Container(
+                  SizedBox(
                      // height:111,
                       width: MediaQuery.of(context).size.width,
                       child: Image.network(posts['image'][0])),
@@ -99,27 +100,71 @@ class EditProduct extends StatelessWidget {
               type:TextInputType.text,
             ),
             const SizedBox(height: 16,),
-            CustomTextFormField(
-              controller:cubit.catController,
-              color:Colors.black,
-              hint:posts['cat'],
-              max: 2,
-              obs: false,
-              obx: false,
-              ontap:(){},
-              type:TextInputType.text,
+            const SizedBox(height: 20,),
+            const Custom_Text(text: 'القسم ',color:Colors.black,
+              fontSize:21,alignment:Alignment.center,
             ),
             const SizedBox(height: 16,),
-            CustomTextFormField(
-              controller:cubit.countryController,
-              color:Colors.black,
-              hint:posts['country'],
-              max: 2,
-              obs: false,
-              obx: false,
-              ontap:(){},
-              type:TextInputType.text,
+            Center(
+              child: DropdownButton<String>(
+                value: cubit.selectedValue,
+                items: cubit.dataList.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data['name'].toString(),
+                    child: Text(data['name']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  cubit.changeCatData(value!);
+
+                },
+                hint: const Text('Select an option'),
+              ),
             ),
+            const SizedBox(height: 16,),
+            const Custom_Text(text: 'البلد',color:Colors.black,
+              fontSize:21,alignment:Alignment.center,
+            ),
+            Center(
+              child: DropdownButton<String>(
+                value: cubit.selectedValue2,
+                items: cubit.dataList2.map((data) {
+                  return DropdownMenuItem<String>(
+                    value: data['name'].toString(),
+                    child: Text(data['name']),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  // setState(() {
+                  cubit.changeCountryData(value!);
+                  //  });
+                },
+                hint: const Text('Select an option'),
+              ),
+            ),
+
+            const SizedBox(height: 16,),
+            // CustomTextFormField(
+            //   controller:cubit.catController,
+            //   color:Colors.black,
+            //   hint:posts['cat'],
+            //   max: 2,
+            //   obs: false,
+            //   obx: false,
+            //   ontap:(){},
+            //   type:TextInputType.text,
+            // ),
+            // const SizedBox(height: 16,),
+            // CustomTextFormField(
+            //   controller:cubit.countryController,
+            //   color:Colors.black,
+            //   hint:posts['country'],
+            //   max: 2,
+            //   obs: false,
+            //   obx: false,
+            //   ontap:(){},
+            //   type:TextInputType.text,
+            // ),
             const SizedBox(height: 16,),
             CustomTextFormField(
               controller:cubit.desController,
@@ -136,6 +181,17 @@ class EditProduct extends StatelessWidget {
               controller:cubit.price,
               color:Colors.black,
               hint: posts['price'].toString(),
+              max: 2,
+              obs: false,
+              obx: false,
+              ontap:(){},
+              type:TextInputType.number,
+            ),
+            const SizedBox(height: 16,),
+            CustomTextFormField(
+              controller:cubit.quant,
+              color:Colors.black,
+              hint:  posts['quant'].toString(),
               max: 2,
               obs: false,
               obx: false,

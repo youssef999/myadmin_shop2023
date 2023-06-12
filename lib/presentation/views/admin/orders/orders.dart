@@ -173,6 +173,13 @@ class OrdersView extends StatelessWidget {
                                           Custom_Text(text: order[i]['name'],
                                               fontSize: 21,
                                               alignment: Alignment.center),
+                                          const SizedBox(width: 11,),
+                                          SizedBox(
+                                            height: 110,
+                                            width: 120,
+                                            child: Image.network(order[i]['image']),
+                                          ),
+
                                           const SizedBox(width: 22,),
                                           Column(
                                             children: [
@@ -197,7 +204,7 @@ class OrdersView extends StatelessWidget {
                                   ),
 
                                 const SizedBox(height: 10,),
-                                Custom_Text(text: "الاجمالي = " + posts['total'],
+                                Custom_Text(text: "الاجمالي = " + posts['total']+" "+posts['currency'],
                                   fontSize: 28,
                                   alignment: Alignment.center,),
                                 const SizedBox(height: 10,),
@@ -325,6 +332,7 @@ class OrdersView extends StatelessWidget {
                                     const Custom_Text(text: 'الاسم  ',
                                       fontSize: 18,
                                       alignment: Alignment.center,),
+
                                     Custom_Text(text: posts['user_name'],
                                         fontSize: 16,
                                         alignment: Alignment.center,
@@ -407,10 +415,18 @@ class OrdersView extends StatelessWidget {
                                       Row(
                                         children: [
                                           const SizedBox(width: 11,),
+
+                                          SizedBox(
+                                            height: 110,
+                                            width: 120,
+                                            child: Image.network(order[i]['image']),
+                                          ),
+                                          const SizedBox(width: 11,),
                                           Custom_Text(text: order[i]['name'],
                                               fontSize: 21,
                                               alignment: Alignment.center),
                                           const SizedBox(width: 22,),
+
                                           Column(
                                             children: [
                                               const Custom_Text(text: 'السعر',
@@ -434,7 +450,7 @@ class OrdersView extends StatelessWidget {
                                   ),
 
                                 const SizedBox(height: 10,),
-                                Custom_Text(text: "الاجمالي = " + posts['total'],
+                                Custom_Text(text: "الاجمالي = " + posts['total']+" "+posts['currency'],
                                   fontSize: 28,
                                   alignment: Alignment.center,),
                                 const SizedBox(height: 10,),
@@ -451,6 +467,25 @@ class OrdersView extends StatelessWidget {
                                         fontSize: 24,
                                         color:Colors.pink,
                                         alignment: Alignment.center),
+
+                                    const SizedBox(height: 20,),
+                                    InkWell(
+                                      child: const Card(
+                                        color:Colors.red,
+                                        child:Padding(
+                                          padding: EdgeInsets.all(12.0),
+                                          child: Custom_Text(
+                                            text: ' رفض ',
+                                            fontSize: 21,
+                                            alignment:Alignment.center,
+                                            color:ColorsManager.primary2,
+                                          ),
+                                        ),
+                                      ),
+                                      onTap:(){
+                                        EditOrderStatus(posts: posts, status: 'refused');
+                                      },
+                                    )
                                   ],
                                 ),
 
@@ -605,6 +640,12 @@ class OrdersView extends StatelessWidget {
                                       Row(
                                         children: [
                                           const SizedBox(width: 11,),
+                                          SizedBox(
+                                            height: 110,
+                                            width: 120,
+                                            child: Image.network(order[i]['image']),
+                                          ),
+                                          const SizedBox(width: 11,),
                                           Custom_Text(text: order[i]['name'],
                                               fontSize: 21,
                                               alignment: Alignment.center),
@@ -632,7 +673,7 @@ class OrdersView extends StatelessWidget {
                                   ),
 
                                 const SizedBox(height: 10,),
-                                Custom_Text(text: "الاجمالي = " + posts['total'],
+                                Custom_Text(text: "${"الاجمالي = " + posts['total']} "+posts['currency'],
                                   fontSize: 28,
                                   alignment: Alignment.center,),
                                 const SizedBox(height: 10,),
@@ -649,6 +690,25 @@ class OrdersView extends StatelessWidget {
                                         fontSize: 24,
                                         color:Colors.pink,
                                         alignment: Alignment.center),
+
+                                    const SizedBox(height: 11,),
+                                    InkWell(
+                                      child: const Card(
+                                        color:Colors.red,
+                                        child:Padding(
+                                          padding: EdgeInsets.all(12.0),
+                                          child: Custom_Text(
+                                            text: ' موافقة  ',
+                                            fontSize: 21,
+                                            alignment:Alignment.center,
+                                            color:ColorsManager.primary2,
+                                          ),
+                                        ),
+                                      ),
+                                      onTap:(){
+                                        EditOrderStatus(posts: posts, status: 'accept');
+                                      },
+                                    )
                                   ],
                                 ),
 
@@ -828,7 +888,7 @@ class OrdersView extends StatelessWidget {
                                   ),
 
                                 const SizedBox(height: 10,),
-                                Custom_Text(text: "الاجمالي = " + posts['total'],
+                                Custom_Text(text: "الاجمالي = " + posts['total']+" "+posts['currency'],
                                   fontSize: 28,
                                   alignment: Alignment.center,),
                                 const SizedBox(height: 10,),

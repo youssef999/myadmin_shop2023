@@ -50,6 +50,12 @@ class AdminCubit extends Cubit<AdminStates> {
   List<XFile>? pickedImageXFiles;
   bool isImage=false;
 
+  String selectedValue='الكل';
+  String selectedValue2='مصر';
+  List dataList = [];
+  List dataList2 = [];
+  bool wait=false;
+
   showDialogBox(BuildContext context) {
     return showDialog(
         context: context,
@@ -116,7 +122,15 @@ class AdminCubit extends Cubit<AdminStates> {
     //   uploadImageToFirebaseStorage(pickedImageXFile!);
   }
 
+  changeCatData(String val){
+    selectedValue=val;
+    emit(ChangeCatSuccessState());
+  }
+  changeCountryData(String val){
+    selectedValue2=val;
+    emit(ChangeCountrySuccessState());
 
+  }
 
   Future<String> uploadImageToFirebaseStorage(XFile image) async {
     try {
@@ -136,8 +150,10 @@ class AdminCubit extends Cubit<AdminStates> {
 
 
 
+
   Future uploadMultiImageToFirebaseStorage(List<XFile> images) async {
-    print('IMAGES');
+
+
     for(int i=0;i<images.length;i++){
 
       try {
@@ -148,21 +164,16 @@ class AdminCubit extends Cubit<AdminStates> {
         TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
         downloadUrl = await taskSnapshot.ref.getDownloadURL();
         downloadUrls.add(downloadUrl);
-        return downloadUrls;
+
       } catch (e) {
         // Handle any errors that occur during the upload process
         print('Error uploading image to Firebase Storage: $e');
-        return downloadUrls;
+
       }
     }
 
-
+    return downloadUrls;
   }
-
-
-
-
-
 
 
 
@@ -171,10 +182,9 @@ class AdminCubit extends Cubit<AdminStates> {
       if(nameController.text.length>1){
         await FirebaseFirestore.instance.collection('countries').add({
           'name': nameController.text,
-          'currency': desController.text,
+          'currency': currencyController.text,
           'img': downloadUrl,
         }).then((value) {
-
          appMessage(text: 'تم اضافة البلد بنجاح');
          Get.off(const AdminView());
         });
@@ -182,10 +192,60 @@ class AdminCubit extends Cubit<AdminStates> {
       }else{
         appMessage(text: 'تاكد من ادخال البيانات بشكل صحيح');
       }
-
     });
   }
 
+  changeCatFirst(String val){
+
+    selectedValue=val;
+    emit(ChangeCatFirstSuccessState());
+  }
+  changeCountryFirst(String val){
+
+    selectedValue2=val;
+    emit(ChangeCountrySuccessState());
+  }
+
+  Future<void> fetchCat() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('categories').get();
+   //   setState(() {
+        dataList = querySnapshot.docs.map((doc) => doc.data()).toList();
+        emit(GetCatSuccessState());
+    //  });
+    } catch (e) {
+      print('Error retrieving data: $e');
+    }
+  }
+
+  Future<void> fetchCountries() async {
+    try {
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('countries').get();
+      //   setState(() {
+      dataList2 = querySnapshot.docs.map((doc) => doc.data()).toList();
+      emit(GetCountrySuccessState());
+      //  });
+    } catch (e) {
+      print('Error retrieving data: $e');
+    }
+  }
+
+
+  // Future<List> getDataFromCollection(String collectionName) async {
+  //   List dataList = [];
+  //
+  //   try {
+  //     QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection(collectionName).get();
+  //     for (var doc in querySnapshot.docs) {
+  //       dataList.add(doc.data());
+  //     }
+  //   } catch (e) {
+  //     print('Error retrieving data: $e');
+  //   }
+  //
+  //   print(dataList);
+  //   return dataList;
+  // }
 
   pickMultiImage() async {
     pickedImageXFiles = await _picker.pickMultiImage(
@@ -199,34 +259,41 @@ class AdminCubit extends Cubit<AdminStates> {
 
   addDataToFireBase() async {
 
+    wait=true;
+    emit(ChangeWaitSuccessState());
 
+      if(pickedImageXFiles==null){
+        appMessage(text: 'اختر الصورة');
+      }
       uploadMultiImageToFirebaseStorage(pickedImageXFiles!).then((value) async {
 
       final random = Random.secure();
-      const chars =
-          'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGRTYUIOAPMSKSOAPALIOWWNCVZ';
+      const chars = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGRTYUIOAPMSKSOAPALIOWWNCVZ';
       String result = '';
+
 
       for (int i = 0; i < 16; i++) {
         result += chars[random.nextInt(chars.length)];
       }
 
-      if(nameController.text.length>1&&desController.text.length>5&&
-      countryController.text.length>1&&price.text.isNotEmpty&&catController.text.length>2){
+
+      if(nameController.text.length>1&&desController.text.isNotEmpty&&price.text.isNotEmpty){
         await FirebaseFirestore.instance.collection('products').add({
           'name': nameController.text,
           'des': desController.text,
           'image': downloadUrls,
           'video':video.text,
-          'quant':quant.text,
-          'country': countryController.text,
+          'quant':num.parse(quant.text),
+          'country': selectedValue2,
           'productid': result,
           'price': num.parse(price.text),
-          'cat': catController.text,
+          'cat': selectedValue,
           'rate':rate.text,
         }).then((value) {
           print('addddddddd');
           emit(AddNewProductSuccessState());
+          wait=false;
+          emit(ChangeWaitSuccessState2());
         });
       }else{
         appMessage(text: 'تاكد من ادخال البيانات بشكل صحيح');
@@ -240,10 +307,7 @@ class AdminCubit extends Cubit<AdminStates> {
 
 
   splashToFireBase() async {
-
-
     uploadMultiImageToFirebaseStorage(pickedImageXFiles!).then((value) async {
-
       await FirebaseFirestore.instance.collection('splash').add({
         'image': downloadUrl,
       }).then((value) {
@@ -287,9 +351,8 @@ class AdminCubit extends Cubit<AdminStates> {
     String des='';
     String vid='';
     num pr=0.0;
-    String country='';
-    String cat='';
-    String img='';
+    num quantity=0.0;
+
 
     if(nameController.text.length<2){
       name=posts['name'];
@@ -314,18 +377,23 @@ class AdminCubit extends Cubit<AdminStates> {
     }else{
       pr=num.parse(price.text);
     }
-
-
-    if(countryController.text.length<2){
-      country=posts['country'];
+    if(quant.text.isEmpty){
+      quantity=posts['quant'];
     }else{
-     country=countryController.text;
+      quantity=num.parse(quant.text);
     }
-    if(catController.text.length<2){
-      cat=posts['cat'];
-    }else{
-      cat=catController.text;
-    }
+    //
+    // if(countryController.text.length<2){
+    //   country=posts['country'];
+    // }
+    // else{
+    //  country=countryController.text;
+    // }
+    // if(catController.text.length<2){
+    //   cat=posts['cat'];
+    // }else{
+    //   cat=catController.text;
+    // }
 
 
 
@@ -348,9 +416,10 @@ class AdminCubit extends Cubit<AdminStates> {
         'des': des,
        // 'image': img,
         'video':vid,
-        'country': country,
+        'country':selectedValue2,
         'price': pr,
-        'cat': cat,
+        'cat': selectedValue,
+        'quant':quantity
        // 'rate': 0.0,
       }).then((value) {
 

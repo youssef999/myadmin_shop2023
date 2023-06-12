@@ -86,18 +86,19 @@ class AdminView extends StatelessWidget {
             }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
             const SizedBox(height: 20,),
 
+            CustomButton(text:'جميع الطلبات علي المتجر   ', onPressed:(){
+              Get.to( OrdersView(
+                status: 'all',
+              ));
+            }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
+            const SizedBox(height: 20,),
             CustomButton(text:' طلبات بانتظار الموافقة    ', onPressed:(){
               Get.to( OrdersView(
                 status: 'wait',
               ));
             }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
 
-            const SizedBox(height: 20,),
-            CustomButton(text:'جميع الطلبات علي المتجر   ', onPressed:(){
-              Get.to( OrdersView(
-                status: 'all',
-              ));
-            }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
+
             const SizedBox(height: 20,),
 
             CustomButton(text:' طلبات تم الموافقة عليها    ', onPressed:(){

@@ -9,6 +9,40 @@ class AppIntialState extends AdminStates{
 
 }
 
+class GetCatSuccessState extends AdminStates{
+
+
+  GetCatSuccessState();
+}
+
+class ChangeWaitSuccessState extends AdminStates{
+
+  ChangeWaitSuccessState();
+}
+class ChangeWaitSuccessState2 extends AdminStates{
+
+  ChangeWaitSuccessState2();
+}
+
+class ChangeCatSuccessState extends AdminStates{
+
+  ChangeCatSuccessState();
+}
+class ChangeCatFirstSuccessState extends AdminStates{
+
+  ChangeCatFirstSuccessState();
+}
+class ChangeCountryFirstSuccessState extends AdminStates{
+
+  ChangeCountryFirstSuccessState();
+}
+
+class ChangeCountrySuccessState extends AdminStates{
+
+  ChangeCountrySuccessState();
+}
+
+
 class AddNewSplashSuccessState extends AdminStates{
 
 
