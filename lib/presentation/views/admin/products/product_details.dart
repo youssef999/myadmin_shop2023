@@ -81,7 +81,7 @@ class AdminProductDetails extends StatelessWidget {
                               children: [
                                 Custom_Text(text: posts['name'],
                                   color:ColorsManager.primary
-                                  ,fontSize:26,alignment:Alignment.center,),
+                                  ,fontSize:16,alignment:Alignment.center,),
 
                                 const SizedBox(width: 60,),
 

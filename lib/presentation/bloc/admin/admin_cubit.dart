@@ -1,25 +1,20 @@
-import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shop_app/presentation/views/Home/main_home.dart';
 import 'package:shop_app/presentation/widgets/Custom_Text.dart';
-import 'package:http/http.dart' as http;
 import '../../const/app_message.dart';
 import '../../views/admin/admin_view.dart';
 import 'admin-states.dart';
 
-class AdminCubit extends Cubit<AdminStates> {
-  AdminCubit() : super(AppIntialState());
 
+ class AdminCubit extends Cubit<AdminStates> {
+
+  AdminCubit() : super(AppIntialState());
   static AdminCubit get(context) => BlocProvider.of(context);
   TextEditingController nameController = TextEditingController();
   TextEditingController codeController = TextEditingController();
@@ -51,7 +46,7 @@ class AdminCubit extends Cubit<AdminStates> {
   bool isImage=false;
 
   String selectedValue='الكل';
-  String selectedValue2='مصر';
+  String selectedValue2='الكويت';
   List dataList = [];
   List dataList2 = [];
   bool wait=false;
@@ -126,10 +121,10 @@ class AdminCubit extends Cubit<AdminStates> {
     selectedValue=val;
     emit(ChangeCatSuccessState());
   }
+
   changeCountryData(String val){
     selectedValue2=val;
     emit(ChangeCountrySuccessState());
-
   }
 
   Future<String> uploadImageToFirebaseStorage(XFile image) async {
@@ -143,7 +138,6 @@ class AdminCubit extends Cubit<AdminStates> {
       return downloadUrl;
     } catch (e) {
       // Handle any errors that occur during the upload process
-      print('Error uploading image to Firebase Storage: $e');
       return '';
     }
   }
@@ -230,7 +224,6 @@ class AdminCubit extends Cubit<AdminStates> {
     }
   }
 
-
   // Future<List> getDataFromCollection(String collectionName) async {
   //   List dataList = [];
   //
@@ -255,7 +248,6 @@ class AdminCubit extends Cubit<AdminStates> {
 
     emit(setImageSuccessState());
   }
-
 
   addDataToFireBase() async {
 
@@ -303,9 +295,6 @@ class AdminCubit extends Cubit<AdminStates> {
 
   }
 
-
-
-
   splashToFireBase() async {
     uploadMultiImageToFirebaseStorage(pickedImageXFiles!).then((value) async {
       await FirebaseFirestore.instance.collection('splash').add({
@@ -318,9 +307,6 @@ class AdminCubit extends Cubit<AdminStates> {
     });
 
   }
-
-
-
 
   addCatToFireBase() async {
     if(nameController.text.length>1){
@@ -337,13 +323,10 @@ class AdminCubit extends Cubit<AdminStates> {
     }
   }
 
-
-
   changeData(){
     data=true;
     emit(ChangeDataSuccessState());
   }
-
 
   EditDataInFireBase ({required DocumentSnapshot posts})async{
 

@@ -5,34 +5,42 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:shop_app/presentation/resources/color_manager.dart';
+import 'package:shop_app/presentation/views/admin/products/choose_country.dart';
 import 'package:shop_app/presentation/views/admin/products/product_details.dart';
 import 'package:shop_app/presentation/widgets/Custom_Text.dart';
 
 class ProductsView extends StatelessWidget {
-  const ProductsView({Key? key}) : super(key: key);
+  String country;
+
+ ProductsView({Key? key,required this.country}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:AppBar(
-        toolbarHeight: 3,
+        toolbarHeight: 50,
+        leading:InkWell(child: const Icon(Icons.arrow_back_ios,color:Colors.white),
+        onTap:(){
+    Get.back();
+        },
+        ),
         backgroundColor:ColorsManager.primary,
       ),
       body:ListView(
         children: [
-          ProductWidget()
+          ProductWidget(country)
         ],
       ),
     );
   }
 }
 
- Widget ProductWidget() {
+ Widget ProductWidget(String country) {
    return SizedBox(
-     height: 12200,
+     height: 122000,
      child: StreamBuilder(
          stream: FirebaseFirestore.instance.collection('products')
-             .where('country',isNotEqualTo: '')
+             .where('country',isEqualTo: country)
              .snapshots(),
          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
            if (!snapshot.hasData) {
@@ -66,10 +74,11 @@ class ProductsView extends StatelessWidget {
                                  borderRadius:BorderRadius.circular(10),
                                  color:ColorsManager.primary2
                              ),
-                             child: Column(
+                             child:ListView(
+                               physics: const NeverScrollableScrollPhysics(),
                                children: <Widget>[
                                  SizedBox(
-                                   height: 130,
+                                   height: 110,
                                    width: MediaQuery.of(context).size.width,
                                    child:  Image.network(posts['image'][0],fit:BoxFit.fitWidth,),),
                                  const SizedBox(

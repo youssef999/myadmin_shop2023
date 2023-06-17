@@ -170,7 +170,7 @@ class EditProduct extends StatelessWidget {
               controller:cubit.desController,
               color:Colors.black,
               hint:posts['des'].toString(),
-              max: 28,
+              max: 44,
               obs: false,
               obx: false,
               ontap:(){},

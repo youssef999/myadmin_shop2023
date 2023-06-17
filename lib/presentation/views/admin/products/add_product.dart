@@ -152,16 +152,6 @@ class AddNewProduct extends StatelessWidget {
 
 
 
-
-
-
-
-
-
-
-
-
-
                         InkWell(
                           child: Column(
                             children: const [

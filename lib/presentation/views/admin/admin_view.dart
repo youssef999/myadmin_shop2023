@@ -13,6 +13,7 @@ import 'package:shop_app/presentation/widgets/Custom_button.dart';
 import 'cat/add_cat.dart';
 import 'cat/all_cat.dart';
 import 'orders/orders.dart';
+import 'products/choose_country.dart';
 import 'products/products_view.dart';
 
 class AdminView extends StatelessWidget {
@@ -58,7 +59,9 @@ class AdminView extends StatelessWidget {
             const SizedBox(height: 20,),
 
             CustomButton(text:'جميع المنتجات ', onPressed:(){
-              Get.to(const ProductsView());
+
+              Get.to(const ChooseCountryView());
+
             }, color1:ColorsManager.primary, color2: ColorsManager.primary2),
 
             const SizedBox(height: 20,),

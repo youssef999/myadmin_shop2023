@@ -4,6 +4,7 @@
  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shop_app/presentation/const/app_message.dart';
 import 'package:shop_app/presentation/resources/color_manager.dart';
 import 'package:shop_app/presentation/views/admin/admin_view.dart';
@@ -860,25 +861,40 @@ class OrdersView extends StatelessWidget {
                                     children: [
                                       Row(
                                         children: [
-                                          const SizedBox(width: 11,),
-                                          Custom_Text(text: order[i]['name'],
-                                              fontSize: 21,
-                                              alignment: Alignment.center),
-                                          const SizedBox(width: 22,),
+                                          const SizedBox(width: 5,),
+                                          SizedBox(
+                                            width:150,
+                                            child: Wrap(
+                                                children:[
+                                                  Center(
+                                                    child: Text(
+                                                        order[i]['name'].toString(),
+                                                        maxLines:2,
+                                                        style: GoogleFonts.tajawal(
+                                                          color:ColorsManager.primary,fontSize: 15,fontWeight: FontWeight.bold,
+                                                          textBaseline: TextBaseline.alphabetic,
+                                                        )
+                                                    ),
+                                                  ),
+                                                ]
+                                            ),
+                                          ),
+
+                                          const SizedBox(width: 10,),
                                           Column(
                                             children: [
                                               const Custom_Text(text: 'السعر',
-                                                  fontSize: 21,
+                                                  fontSize: 17,
                                                   alignment: Alignment.center),
                                               Custom_Text(text: order[i]['price'],
-                                                  fontSize: 21,
+                                                  fontSize: 16,
                                                   alignment: Alignment.center),
                                             ],
                                           ),
-                                          const SizedBox(width: 22,),
+                                          const SizedBox(width: 10,),
                                           Custom_Text(
                                               text: " X " + order[i]['quant'],
-                                              fontSize: 21,
+                                              fontSize: 16,
                                               alignment: Alignment.center),
                                         ],
                                       ),
@@ -888,7 +904,7 @@ class OrdersView extends StatelessWidget {
                                   ),
 
                                 const SizedBox(height: 10,),
-                                Custom_Text(text: "الاجمالي = " + posts['total']+" "+posts['currency'],
+                                Custom_Text(text: "${"الاجمالي = " + posts['total']} "+posts['currency'],
                                   fontSize: 28,
                                   alignment: Alignment.center,),
                                 const SizedBox(height: 10,),
